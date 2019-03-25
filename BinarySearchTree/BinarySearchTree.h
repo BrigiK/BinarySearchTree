@@ -1,11 +1,12 @@
 #pragma once
+#include <iostream>
 
 class BinarySearchTree
 {
 private:
 	struct Node
 	{
-		Node() : value(0), left(nullptr), right(nullptr) {}
+		Node(int value) : value(value), left(nullptr), right(nullptr) {}
 
 		int value;
 		Node* left;
@@ -23,9 +24,9 @@ public:
 
 	int size();
 
-	void printLRR();
+	friend void operator<<(std::ostream& os, const BinarySearchTree& binSearchTree);
 
 private:
-	Node* root;
+	Node* m_root;
 
 };
