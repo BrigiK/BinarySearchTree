@@ -23,6 +23,28 @@ namespace BinarySearchTreeTests
 			Assert::IsTrue(exists, L"Value not found in tree");
 		}
 
+		TEST_METHOD(InsertExistsLargerTree)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(5);
+			binSearchTree.insert(3);
+			binSearchTree.insert(6);
+			binSearchTree.insert(2);
+			binSearchTree.insert(4);
+			
+			bool exists1 = binSearchTree.exists(5);
+			bool exists2 = binSearchTree.exists(3);
+			bool exists3 = binSearchTree.exists(6);
+			bool exists4 = binSearchTree.exists(2);
+			bool exists5 = binSearchTree.exists(4);
+
+			Assert::IsTrue(exists1, L"Value not found in tree");
+			Assert::IsTrue(exists2, L"Value not found in tree");
+			Assert::IsTrue(exists3, L"Value not found in tree");
+			Assert::IsTrue(exists4, L"Value not found in tree");
+			Assert::IsTrue(exists5, L"Value not found in tree");
+		}
+
 		TEST_METHOD(NewTreeIsEmpty)
 		{
 			BinarySearchTree binSearchTree;
@@ -52,7 +74,7 @@ namespace BinarySearchTreeTests
 			Assert::AreEqual(5, binSearchTree.size(), L"Value was not inserted, or size did not return correctly");
 		}
 
-		TEST_METHOD(Removed)
+		TEST_METHOD(RemovedLeaf)
 		{
 			BinarySearchTree binSearchTree;
 			const int valueToBeRemoved = 10;
@@ -62,10 +84,31 @@ namespace BinarySearchTreeTests
 			binSearchTree.insert(valueToBeRemoved + 2);
 			int sizeBefore = binSearchTree.size();
 
-			binSearchTree.remove(valueToBeRemoved);
+			binSearchTree.remove(valueToBeRemoved + 2);
 			int sizeAfter = binSearchTree.size();
 
-			Assert::IsFalse(binSearchTree.exists(valueToBeRemoved), L"Value still in tree");
+			Assert::IsFalse(binSearchTree.exists(valueToBeRemoved + 2), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChild)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(5);
+			binSearchTree.insert(7);
+			binSearchTree.insert(3);
+			binSearchTree.insert(4);
+			binSearchTree.insert(2);
+			binSearchTree.insert(1);
+			binSearchTree.insert(6);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(7);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(7), L"Value still in tree");
 			Assert::AreNotEqual(sizeBefore, sizeAfter);
 			Assert::AreEqual(sizeBefore - 1, sizeAfter);
 		}
@@ -75,7 +118,6 @@ namespace BinarySearchTreeTests
 			BinarySearchTree binSearchTree;
 			int value = 10;
 
-			// MEGKELL CSINALNI HOGY NE LEHESSEN TOBB EGYFORMA SZAMOT BETENNI
 			binSearchTree.insert(value + 5);
 			binSearchTree.insert(value + 5);
 			binSearchTree.insert(value + 3);
