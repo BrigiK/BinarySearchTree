@@ -53,34 +53,47 @@ void BinarySearchTree::insert(int value)
 	}
 }
 
-bool BinarySearchTree::exists(int value)
+BinarySearchTree::Node* BinarySearchTree::find(int value)
 {
-	std::stack<Node*> stack;
 	Node* currentNode = m_root;
 
-	while (!stack.empty() || currentNode != nullptr)
+	while (currentNode != nullptr && currentNode->value != value)
 	{
-		while (currentNode != nullptr)
+		if (value < currentNode->value)
 		{
-			stack.push(currentNode);
-
-			if (currentNode->value == value)
-			{
-				return true;
-			}
-
 			currentNode = currentNode->left;
 		}
-
-		if (!stack.empty())
+		else
 		{
-			BinarySearchTree::Node* top = stack.top();
-			stack.pop();
-			currentNode = top->right;
+			currentNode = currentNode->right;
 		}
 	}
 
+	return currentNode;
+}
+
+bool BinarySearchTree::exists(int value)
+{
+	if (find(value))
+	{
+		return true;
+	}
+
 	return false;
+}
+
+std::pair<BinarySearchTree::Node*, BinarySearchTree::Node*> BinarySearchTree::min(Node* node, Node* parent)
+{
+	Node* currentNode = node;
+	Node* currentParent = parent;
+
+	while (currentNode->left != nullptr)
+	{
+		currentParent = currentNode;
+		currentNode = currentNode->left;
+	}
+	
+	return std::make_pair(currentNode, currentParent);
 }
 
 void BinarySearchTree::remove(int value)
@@ -96,71 +109,82 @@ void BinarySearchTree::remove(int value)
 	}
 
 	Node* currentNode = m_root;
-	
-	while (true)
+	Node* currentNodeParent = nullptr;
+
+	// find node to be deleted
+	while (currentNode->value != value)
 	{
+		currentNodeParent = currentNode;
+
 		if (value < currentNode->value)
 		{
-			if (currentNode->left->value == value)
-			{
-				// has one child
-				auto currentsLeft = currentNode->left;
-				if (currentsLeft->left != nullptr)
-				{
-					currentNode->left = currentsLeft->left;
-					break;
-				}
-				if (currentsLeft->right != nullptr)
-				{
-					currentNode->left = currentsLeft->right;
-					break;
-				}
-				// is a leaf
-				else
-				{
-					currentNode->left = nullptr;
-					break;
-				}
-			}
-			else
-			{
-				currentNode = currentNode->left;
-			}
+			currentNode = currentNode->left;
 		}
-
-		if (value > currentNode->value)
+		else
 		{
-			if (currentNode->right->value == value)
-			{
-				// has one child
-				auto currentsRight = currentNode->right;
-				if (currentsRight->right != nullptr)
-				{
-					currentNode->right = currentsRight->right;
-					break;
-				}
-				if (currentsRight->left != nullptr)
-				{
-					currentNode->right = currentsRight->left;
-					break;
-				}
-				// is a leaf
-				else
-				{
-					currentNode->right = nullptr;
-					break;
-				}
-			}
-			else
-			{
-				currentNode = currentNode->right;
-			}
+			currentNode = currentNode->right;
 		}
 	}
 
-	// Node to be deleted has two children: Find inorder successor of the node. Copy contents 
-	// of the inorder successor to the node and delete the inorder successor. Note that inorder 
-	// predecessor can also be used.
+	// see if node to be deleted is a leaf
+	if (currentNode->left == nullptr && currentNode->right == nullptr)
+	{
+		if (currentNodeParent->left == currentNode)
+		{
+			currentNodeParent->left = nullptr;
+			delete currentNode;
+			return;
+		}
+		else if (currentNodeParent->right == currentNode)
+		{
+			currentNodeParent->right = nullptr;
+			delete currentNode;
+			return;
+		}
+	}
+
+	// see if node to be deleted has only one child
+	if (currentNode->left != nullptr && currentNode->right == nullptr)
+	{
+		currentNode->value = currentNode->left->value;
+		delete currentNode->left;
+		currentNode->left = nullptr;
+		return;
+	}
+	else if (currentNode->left == nullptr && currentNode->right != nullptr)
+	{
+		currentNode->value = currentNode->right->value;
+		delete currentNode->right;
+		currentNode->right = nullptr;
+		return;
+	}
+
+	// see if node to be deleted has two children
+	if (currentNode->left != nullptr && currentNode->right != nullptr)
+	{
+		std::pair<Node*, Node*> minNodeAndParent = min(currentNode->right, currentNode);
+		Node* minNode = minNodeAndParent.first;
+		Node* minNodeParent = minNodeAndParent.second;
+
+		// rewiring
+		minNode->left = currentNode->left; // 1
+		if (currentNodeParent->left == currentNode) // 2
+		{
+			currentNodeParent->left = minNode;
+		}
+		else if (currentNodeParent->right == currentNode)
+		{
+			currentNodeParent->right = minNode;
+		}
+		if (minNodeParent != currentNode)
+		{
+			minNodeParent->left = minNode->right; // 3
+			minNode->right = currentNode->right; // 4
+		}
+
+		delete currentNode;
+		return;
+	}
 }
 
 int BinarySearchTree::size()
