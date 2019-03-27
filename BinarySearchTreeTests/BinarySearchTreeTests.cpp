@@ -23,6 +23,18 @@ namespace BinarySearchTreeTests
 			Assert::IsTrue(exists, L"Value not found in tree");
 		}
 
+		TEST_METHOD(Find)
+		{
+			BinarySearchTree binSearchTree;
+			const int insertedValue = 2;
+			binSearchTree.insert(5);
+			binSearchTree.insert(3);
+			binSearchTree.insert(insertedValue);
+			binSearchTree.insert(6);
+
+			Assert::AreEqual(insertedValue, binSearchTree.find(insertedValue)->value);
+		}
+
 		TEST_METHOD(InsertExistsLargerTree)
 		{
 			BinarySearchTree binSearchTree;
@@ -92,23 +104,184 @@ namespace BinarySearchTreeTests
 			Assert::AreEqual(sizeBefore - 1, sizeAfter);
 		}
 
-		TEST_METHOD(RemovedWithOneChild)
+		TEST_METHOD(RemovedWithOneChildRootLeftTreeRight)
 		{
 			BinarySearchTree binSearchTree;
-			binSearchTree.insert(5);
-			binSearchTree.insert(7);
-			binSearchTree.insert(3);
-			binSearchTree.insert(4);
-			binSearchTree.insert(2);
-			binSearchTree.insert(1);
-			binSearchTree.insert(6);
+			binSearchTree.insert(10);
+			binSearchTree.insert(8);
+			binSearchTree.insert(9);
 
 			int sizeBefore = binSearchTree.size();
 
-			binSearchTree.remove(7);
+			binSearchTree.remove(8);
 			int sizeAfter = binSearchTree.size();
 
-			Assert::IsFalse(binSearchTree.exists(7), L"Value still in tree");
+			Assert::IsFalse(binSearchTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootLeftTreeLeft)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(10);
+			binSearchTree.insert(8);
+			binSearchTree.insert(7);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(8);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootRightTreeLeft)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(10);
+			binSearchTree.insert(12);
+			binSearchTree.insert(11);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(12);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootRightTreeRight)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(10);
+			binSearchTree.insert(12);
+			binSearchTree.insert(13);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(12);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildLeftTreeRight)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(20);
+			binSearchTree.insert(10);
+			binSearchTree.insert(8);
+			binSearchTree.insert(9);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(8);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildLeftTreeLeft)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(20);
+			binSearchTree.insert(10);
+			binSearchTree.insert(8);
+			binSearchTree.insert(7);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(8);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRightTreeLeft)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(5);
+			binSearchTree.insert(10);
+			binSearchTree.insert(12);
+			binSearchTree.insert(11);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(12);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRightTreeRight)
+		{
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(5);
+			binSearchTree.insert(10);
+			binSearchTree.insert(12);
+			binSearchTree.insert(13);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(12);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithTwoChildsFromLeft)
+		{
+			int deletedValue = 5;
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(11);
+			binSearchTree.insert(deletedValue);
+			binSearchTree.insert(2);
+			binSearchTree.insert(7);
+			binSearchTree.insert(10);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(deletedValue);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(deletedValue), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithTwoChildsFromRight)
+		{
+			int deletedValue = 16;
+			BinarySearchTree binSearchTree;
+			binSearchTree.insert(11);			
+			binSearchTree.insert(deletedValue);
+			binSearchTree.insert(14);
+			binSearchTree.insert(23);
+			binSearchTree.insert(21);
+			binSearchTree.insert(24);
+			binSearchTree.insert(22);
+
+			int sizeBefore = binSearchTree.size();
+
+			binSearchTree.remove(deletedValue);
+			int sizeAfter = binSearchTree.size();
+
+			Assert::IsFalse(binSearchTree.exists(deletedValue), L"Value still in tree");
 			Assert::AreNotEqual(sizeBefore, sizeAfter);
 			Assert::AreEqual(sizeBefore - 1, sizeAfter);
 		}
