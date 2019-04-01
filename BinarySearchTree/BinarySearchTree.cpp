@@ -6,6 +6,27 @@ BinarySearchTree::BinarySearchTree() : m_root(nullptr)
 {
 }
 
+BinarySearchTree::~BinarySearchTree()
+{
+	if (m_root)
+	{
+		delete m_root;
+		m_root = nullptr;
+	}
+}
+
+BinarySearchTree::Node::~Node()
+{
+	if (left)
+	{
+		delete left;
+	}
+	if (right)
+	{
+		delete right;
+	}
+}
+
 void BinarySearchTree::insert(int value)
 {
 	if (m_root == nullptr)
