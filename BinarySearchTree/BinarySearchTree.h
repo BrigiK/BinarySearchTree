@@ -27,15 +27,15 @@ public:
 
 	void insert(int value);
 
-	bool exists(int value);
+	bool exists(int value) const;
 
-	Node* find(int value);
+	Node* find(int value) const;
 
 	void remove(int value);
 
-	int size();
+	int size() const;
 
-	std::pair<Node*, Node*> min(Node* node, Node* parent);
+	static std::pair<Node*, Node*> min(Node* node, Node* parent);
 
 	friend void operator<<(std::ostream& os, const BinarySearchTree& binSearchTree);
 

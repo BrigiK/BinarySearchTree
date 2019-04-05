@@ -1,6 +1,6 @@
 #include "BinarySearchTree.h"
 
-#include <stack> 
+#include <stack>
 
 BinarySearchTree::BinarySearchTree() : m_root(nullptr)
 {
@@ -74,7 +74,7 @@ void BinarySearchTree::insert(int value)
 	}
 }
 
-BinarySearchTree::Node* BinarySearchTree::find(int value)
+BinarySearchTree::Node* BinarySearchTree::find(int value) const
 {
 	Node* currentNode = m_root;
 
@@ -93,7 +93,7 @@ BinarySearchTree::Node* BinarySearchTree::find(int value)
 	return currentNode;
 }
 
-bool BinarySearchTree::exists(int value)
+bool BinarySearchTree::exists(int value) const
 {
 	if (find(value))
 	{
@@ -208,7 +208,7 @@ void BinarySearchTree::remove(int value)
 	}
 }
 
-int BinarySearchTree::size()
+int BinarySearchTree::size() const
 {
 	int count = 0;
 
