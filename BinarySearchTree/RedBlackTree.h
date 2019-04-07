@@ -37,7 +37,7 @@ public:
 
 	void rotateRight(Node* currentNode, Node* currentNodeParent);
 
-	void rearrange(Node* currentNode, Node* currentNodeParent);
+	void rearrange(Node* currentNode);
 
 	void insert(int value);
 

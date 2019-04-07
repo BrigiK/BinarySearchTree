@@ -21,7 +21,7 @@ namespace RedBlackTreeTests
 			Assert::IsTrue(exists, L"Value not found in tree");
 		}
 
-		TEST_METHOD(InsertRedHasNoRedChild)
+		TEST_METHOD(InsertExistsLargerTree)
 		{
 			RedBlackTree redBlackTree;
 			redBlackTree.insert(7);
@@ -34,6 +34,20 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(26);
 
 			bool exists = redBlackTree.exists(18);
+			Assert::IsTrue(exists, L"Value not found in tree");
+		}
+
+		TEST_METHOD(InsertExistsLargerTree2)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(11);
+			redBlackTree.insert(1);
+			redBlackTree.insert(14);
+			redBlackTree.insert(2);
+			redBlackTree.insert(7);
+			redBlackTree.insert(15);
+
+			bool exists = redBlackTree.exists(14);
 			Assert::IsTrue(exists, L"Value not found in tree");
 		}
 
