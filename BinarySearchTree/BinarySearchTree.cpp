@@ -153,12 +153,16 @@ void BinarySearchTree::remove(int value)
 		if (currentNodeParent->left == currentNode)
 		{
 			currentNodeParent->left = nullptr;
+			currentNode->left = nullptr;
+			currentNode->right = nullptr;
 			delete currentNode;
 			return;
 		}
 		else if (currentNodeParent->right == currentNode)
 		{
 			currentNodeParent->right = nullptr;
+			currentNode->left = nullptr;
+			currentNode->right = nullptr;
 			delete currentNode;
 			return;
 		}
@@ -168,15 +172,17 @@ void BinarySearchTree::remove(int value)
 	if (currentNode->left != nullptr && currentNode->right == nullptr)
 	{
 		currentNode->value = currentNode->left->value;
-		delete currentNode->left;
 		currentNode->left = nullptr;
+		currentNode->right = nullptr;
+		delete currentNode->left;
 		return;
 	}
 	else if (currentNode->left == nullptr && currentNode->right != nullptr)
 	{
 		currentNode->value = currentNode->right->value;
-		delete currentNode->right;
+		currentNode->left = nullptr;
 		currentNode->right = nullptr;
+		delete currentNode->right;
 		return;
 	}
 
@@ -203,6 +209,8 @@ void BinarySearchTree::remove(int value)
 			minNode->right = currentNode->right; // 4
 		}
 
+		currentNode->left = nullptr;
+		currentNode->right = nullptr;
 		delete currentNode;
 		return;
 	}
