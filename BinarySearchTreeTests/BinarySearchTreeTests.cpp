@@ -268,7 +268,7 @@ namespace BinarySearchTreeTests
 		{
 			int deletedValue = 16;
 			BinarySearchTree binSearchTree;
-			binSearchTree.insert(11);			
+			binSearchTree.insert(11);
 			binSearchTree.insert(deletedValue);
 			binSearchTree.insert(14);
 			binSearchTree.insert(23);

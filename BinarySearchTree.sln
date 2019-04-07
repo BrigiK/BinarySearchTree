@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinarySearchTree", "BinarySearchTree\BinarySearchTree.vcxproj", "{5B814CEB-02A9-4E65-A8C2-094B8EBA2667}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BinarySearchTreeTests", "BinarySearchTreeTests\BinarySearchTreeTests.vcxproj", "{52434584-E49F-4C30-97E4-9C65C7EC4075}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5B814CEB-02A9-4E65-A8C2-094B8EBA2667} = {5B814CEB-02A9-4E65-A8C2-094B8EBA2667}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
