@@ -8,107 +8,25 @@ RedBlackTree::RedBlackTree() : m_root(nullptr)
 
 RedBlackTree::~RedBlackTree()
 {
+	if (m_root)
+	{
+		delete m_root;
+		m_root = nullptr;
+	}
 }
 
-void RedBlackTree::rotateLeft(Node* currentNode, Node* currentNodeParent)
+RedBlackTree::Node::~Node()
 {
-	if (currentNode->right == nullptr)
+	if (left)
 	{
-		return;
+		delete left;
+		left = nullptr;
 	}
-
-	Node* currentNodeRight = currentNode->right;
-
-	if (currentNodeParent == nullptr)
+	if (right)
 	{
-		m_root = currentNodeRight;
+		delete right;
+		right = nullptr;
 	}
-	else if (currentNode == currentNodeParent->left)
-	{
-		currentNodeParent->left = currentNodeRight;
-	}
-	else
-	{
-		currentNodeParent->right = currentNodeRight;
-	}
-
-	currentNode->right = currentNodeRight->left;
-	currentNodeRight->left = currentNode;
-}
-
-void RedBlackTree::rotateRight(Node* currentNode, Node* currentNodeParent)
-{
-	if (currentNode->left == nullptr)
-	{
-		return;
-	}
-
-	auto currentNodeLeft = currentNode->left;
-
-	if (currentNodeParent == nullptr)
-	{
-		m_root = currentNodeLeft;
-	}
-	else if (currentNode == currentNodeParent->left)
-	{
-		currentNodeParent->left = currentNodeLeft;
-	}
-	else
-	{
-		currentNodeParent->right = currentNodeLeft;
-	}
-
-	currentNode->left = currentNodeLeft->right;
-	currentNodeLeft->right = currentNode;
-}
-
-void RedBlackTree::rearrange(Node* currentNode)
-{
-	Node* currentNodeParent = nullptr;
-	Node* currentNodeGrandParent = nullptr;
-
-	while ((currentNode != m_root) && (currentNode->color != RedBlackTree::Node::Color::Black) && (currentNode->parent->color == RedBlackTree::Node::Color::Red))
-	{
-		currentNodeParent = currentNode->parent;
-		currentNodeGrandParent = currentNodeParent->parent;
-
-		if (currentNodeParent == currentNodeGrandParent->left)
-		{
-			auto currentNodeUncle = currentNodeGrandParent->right;
-			
-			if (currentNodeUncle->color == RedBlackTree::Node::Color::Red)
-			{
-				currentNodeParent->color = RedBlackTree::Node::Color::Black;
-				currentNodeUncle->color = RedBlackTree::Node::Color::Black;
-				currentNodeGrandParent->color = RedBlackTree::Node::Color::Red;
-				currentNode = currentNodeGrandParent;
-			}
-			else if (currentNode == currentNodeParent->right)
-			{
-				currentNode = currentNodeParent;
-				rotateLeft(currentNode, currentNodeParent);
-			}
-		}
-		else if (currentNodeParent == currentNodeGrandParent->right)
-		{
-			auto currentNodeUncle = currentNodeGrandParent->left;
-			
-			if (currentNodeUncle->color == RedBlackTree::Node::Color::Red)
-			{
-				currentNodeParent->color = RedBlackTree::Node::Color::Black;
-				currentNodeUncle->color = RedBlackTree::Node::Color::Black;
-				currentNodeGrandParent->color = RedBlackTree::Node::Color::Red;
-				currentNode = currentNodeGrandParent;
-			}
-			else if (currentNode == currentNodeParent->left)
-			{
-				currentNode = currentNodeParent;
-				rotateRight(currentNode, currentNodeParent); // Az uncle null lesz egy idoben. Meg kell csinalni, hogy amikor a fa rotalodik, csinalja ujra a legaturakat
-			}
-		}
-	}
-
-	m_root->color = RedBlackTree::Node::Color::Black;
 }
 
 void RedBlackTree::insert(int value)
@@ -127,7 +45,6 @@ void RedBlackTree::insert(int value)
 	}
 
 	Node* newNode = nullptr;
-	Node* newNodeGrandParent = nullptr;
 
 	while (currentNode->value != value)
 	{
@@ -138,10 +55,6 @@ void RedBlackTree::insert(int value)
 				newNode = new Node(value, RedBlackTree::Node::Color::Red);
 				currentNode->left = newNode;
 				newNode->parent = currentNode;
-				if (newNode->parent->parent != nullptr)
-				{
-					newNodeGrandParent = newNode->parent->parent;
-				}
 				break;
 			}
 			else
@@ -157,10 +70,6 @@ void RedBlackTree::insert(int value)
 				newNode = new Node(value, RedBlackTree::Node::Color::Red);
 				currentNode->right = newNode;
 				newNode->parent = currentNode;
-				if (newNode->parent->parent != nullptr)
-				{
-					newNodeGrandParent = newNode->parent->parent;
-				}
 				break;
 			}
 			else
@@ -182,7 +91,7 @@ bool RedBlackTree::exists(int value)
 	return false;
 }
 
-RedBlackTree::Node * RedBlackTree::find(int value)
+RedBlackTree::Node* RedBlackTree::find(int value)
 {
 	Node* currentNode = m_root;
 
@@ -201,9 +110,20 @@ RedBlackTree::Node * RedBlackTree::find(int value)
 	return currentNode;
 }
 
+RedBlackTree::Node* RedBlackTree::min(Node* node)
+{
+	Node* currentnode = node;
+
+	while (currentnode->left != nullptr)
+	{
+		currentnode = currentnode->left;
+	}
+
+	return currentnode;
+}
+
 void RedBlackTree::remove(int value)
 {
-	rotateRight(m_root->right, m_root);
 }
 
 int RedBlackTree::size()
@@ -233,11 +153,6 @@ int RedBlackTree::size()
 	return count;
 }
 
-std::pair<RedBlackTree::Node*, RedBlackTree::Node*> RedBlackTree::min(Node * node, Node * parent)
-{
-	return std::pair<Node*, Node*>();
-}
-
 void operator<<(std::ostream & os, const RedBlackTree & redBlackTree)
 {
 	std::stack<RedBlackTree::Node*> stack;
@@ -259,4 +174,127 @@ void operator<<(std::ostream & os, const RedBlackTree & redBlackTree)
 			currentNode = top->right;
 		}
 	}
+}
+
+void RedBlackTree::rotateLeft(Node* currentNode)
+{
+	if (currentNode->right == nullptr)
+	{
+		return;
+	}
+
+	Node* currentNodeRight = currentNode->right;
+
+	if (currentNode->parent == nullptr)
+	{
+		m_root = currentNodeRight;
+	}
+	else if (currentNode == currentNode->parent->left)
+	{
+		currentNode->parent->left = currentNodeRight;
+	}
+	else
+	{
+		currentNode->parent->right = currentNodeRight;
+	}
+	currentNodeRight->parent = currentNode->parent;
+
+	currentNode->right = currentNodeRight->left;
+	if(currentNodeRight->left)
+		currentNodeRight->left->parent = currentNode;
+
+	currentNodeRight->left = currentNode;
+	currentNode->parent = currentNodeRight;
+}
+
+void RedBlackTree::rotateRight(Node* currentNode)
+{
+	if (currentNode->left == nullptr)
+	{
+		return;
+	}
+
+	auto currentNodeLeft = currentNode->left;
+
+	if (currentNode->parent == nullptr)
+	{
+		m_root = currentNodeLeft;
+	}
+	else if (currentNode == currentNode->parent->left)
+	{
+		currentNode->parent->left = currentNodeLeft;
+	}
+	else
+	{
+		currentNode->parent->right = currentNodeLeft;
+	}
+	currentNodeLeft->parent = currentNode->parent;
+
+	currentNode->left = currentNodeLeft->right;
+	if(currentNodeLeft->right)
+		currentNodeLeft->right->parent = currentNode;
+
+	currentNodeLeft->right = currentNode;
+	currentNode->parent = currentNodeLeft;
+}
+
+void RedBlackTree::rearrange(Node* currentNode)
+{	
+	while (currentNode->parent != nullptr && currentNode->parent->color == Node::Color::Red)
+	{
+		Node* grandParent = currentNode->parent->parent;
+		if (grandParent == nullptr)
+			break;
+
+		if (currentNode->parent == grandParent->left)
+		{
+			Node* uncle = grandParent->right;
+			if (uncle && uncle->color == Node::Color::Red)
+			{
+				currentNode->parent->color = Node::Color::Black;
+				uncle->color = Node::Color::Black;
+				grandParent->color = Node::Color::Red;
+				currentNode = grandParent;
+			}
+			else
+			{
+				if (currentNode == currentNode->parent->right)
+				{
+					// crt becomes parent; parent becomes crt; really
+					currentNode = currentNode->parent;
+					rotateLeft(currentNode);
+				}
+
+				currentNode->parent->color = Node::Color::Black;
+				grandParent->color = Node::Color::Red;
+				rotateRight(currentNode->parent->parent);
+			}
+		}
+		else
+		{
+			Node* uncle = grandParent->left;
+			if (uncle && uncle->color == Node::Color::Red)
+			{
+				currentNode->parent->color = Node::Color::Black;
+				uncle->color = Node::Color::Black;
+				grandParent->color = Node::Color::Red;
+				currentNode = grandParent;
+			}
+			else
+			{
+				if (currentNode == currentNode->parent->left)
+				{
+					// crt becomes parent; parent becomes crt; really
+					currentNode = currentNode->parent;
+					rotateRight(currentNode);
+				}
+
+				currentNode->parent->color = Node::Color::Black;
+				grandParent->color = Node::Color::Red;
+				rotateLeft(currentNode->parent->parent);
+			}
+		}
+	}
+
+	m_root->color = Node::Color::Black;
 }
