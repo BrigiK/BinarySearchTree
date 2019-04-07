@@ -51,6 +51,29 @@ namespace RedBlackTreeTests
 			Assert::IsTrue(exists, L"Value not found in tree");
 		}
 
+		TEST_METHOD(InsertAllCases)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(8);
+			redBlackTree.insert(5);
+			redBlackTree.insert(15);
+			redBlackTree.insert(12);
+			redBlackTree.insert(19);
+			redBlackTree.insert(9);
+			redBlackTree.insert(13);
+			redBlackTree.insert(23);
+
+			redBlackTree.insert(10);
+			bool exists = redBlackTree.exists(10);
+			Assert::IsTrue(exists, L"Value not found in tree");
+
+			std::stringstream strStream;
+			strStream << redBlackTree;
+
+			std::string expected = "5 8 9 10 12 13 15 19 23 ";
+			Assert::AreEqual(expected, strStream.str());
+		}
+
 		TEST_METHOD(LeftRotateWithRoot)
 		{
 			RedBlackTree redBlackTree;
@@ -62,7 +85,13 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(6);
 			redBlackTree.insert(9);
 
-			redBlackTree.remove(12);
+			RedBlackTreePrivate::RotateLeftRoot(redBlackTree);
+
+			std::stringstream strStream;
+			strStream << redBlackTree;
+
+			std::string expected = "2 5 6 8 9 10 12 ";
+			Assert::AreEqual(expected, strStream.str());
 		}
 
 		TEST_METHOD(LeftRotateNotRoot)
@@ -76,7 +105,13 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(9);
 			redBlackTree.insert(12);
 
-			redBlackTree.remove(12);
+			RedBlackTreePrivate::RotateLeftRootLeft(redBlackTree);
+
+			std::stringstream strStream;
+			strStream << redBlackTree;
+
+			std::string expected = "2 5 6 8 9 10 12 ";
+			Assert::AreEqual(expected, strStream.str());
 		}
 
 		TEST_METHOD(RightRotateWithRoot)
@@ -90,13 +125,19 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(9);
 			redBlackTree.insert(12);
 
-			redBlackTree.remove(12);
+			RedBlackTreePrivate::RotateRightRoot(redBlackTree);
+
+			std::stringstream strStream;
+			strStream << redBlackTree;
+
+			std::string expected = "2 5 6 8 9 10 12 ";
+			Assert::AreEqual(expected, strStream.str());
 		}
 
 		TEST_METHOD(RightRotateNotRoot)
 		{
 			RedBlackTree redBlackTree;
-			redBlackTree.insert(7);
+			/*redBlackTree.insert(7);
 			redBlackTree.insert(18);
 			redBlackTree.insert(11);
 			redBlackTree.insert(9);
@@ -105,9 +146,238 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(17);
 			redBlackTree.insert(19);
 			redBlackTree.insert(22);
-			redBlackTree.insert(20);
+			redBlackTree.insert(20);*/
+			redBlackTree.insert(5);
+			redBlackTree.insert(2);
+			redBlackTree.insert(10);
+			redBlackTree.insert(8);
+			redBlackTree.insert(6);
+			redBlackTree.insert(9);
+			redBlackTree.insert(12);
+
+			RedBlackTreePrivate::RotateRightRootRight(redBlackTree);
+
+			std::stringstream strStream;
+			strStream << redBlackTree;
+
+			std::string expected = "2 5 6 8 9 10 12 ";
+			Assert::AreEqual(expected, strStream.str());
+		}
+
+		TEST_METHOD(RotateLeft)
+		{
+			RedBlackTree tree;
+			tree.insert(5);
+			tree.insert(6);
+			tree.insert(3);
+			tree.insert(4);
+			tree.insert(2);
+
+			std::stringstream strStream;
+			strStream << tree;
+
+			std::string expected = "2 3 4 5 6 ";
+			Assert::AreEqual(expected, strStream.str());
+		}
+
+		TEST_METHOD(RemovedLeaf)
+		{
+			RedBlackTree redBlackTree;
+			const int valueToBeRemoved = 10;
+
+			redBlackTree.insert(valueToBeRemoved - 2);
+			redBlackTree.insert(valueToBeRemoved);
+			redBlackTree.insert(valueToBeRemoved + 2);
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(valueToBeRemoved + 2);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(valueToBeRemoved + 2), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootLeftTreeRight)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(10);
+			redBlackTree.insert(8);
+			redBlackTree.insert(9);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(8);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootLeftTreeLeft)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(10);
+			redBlackTree.insert(8);
+			redBlackTree.insert(7);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(8);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootRightTreeLeft)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(10);
+			redBlackTree.insert(12);
+			redBlackTree.insert(11);
+
+			int sizeBefore = redBlackTree.size();
 
 			redBlackTree.remove(12);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRootRightTreeRight)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(10);
+			redBlackTree.insert(12);
+			redBlackTree.insert(13);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(12);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildLeftTreeRight)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(20);
+			redBlackTree.insert(10);
+			redBlackTree.insert(8);
+			redBlackTree.insert(9);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(8);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildLeftTreeLeft)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(20);
+			redBlackTree.insert(10);
+			redBlackTree.insert(8);
+			redBlackTree.insert(7);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(8);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(8), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRightTreeLeft)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(5);
+			redBlackTree.insert(10);
+			redBlackTree.insert(12);
+			redBlackTree.insert(11);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(12);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithOneChildRightTreeRight)
+		{
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(5);
+			redBlackTree.insert(10);
+			redBlackTree.insert(12);
+			redBlackTree.insert(13);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(12);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(12), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithTwoChildsFromLeft)
+		{
+			int deletedValue = 5;
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(11);
+			redBlackTree.insert(deletedValue);
+			redBlackTree.insert(2);
+			redBlackTree.insert(7);
+			redBlackTree.insert(10);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(deletedValue);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(deletedValue), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
+		}
+
+		TEST_METHOD(RemovedWithTwoChildsFromRight)
+		{
+			int deletedValue = 16;
+			RedBlackTree redBlackTree;
+			redBlackTree.insert(11);
+			redBlackTree.insert(deletedValue);
+			redBlackTree.insert(14);
+			redBlackTree.insert(23);
+			redBlackTree.insert(21);
+			redBlackTree.insert(24);
+			redBlackTree.insert(22);
+
+			int sizeBefore = redBlackTree.size();
+
+			redBlackTree.remove(deletedValue);
+			int sizeAfter = redBlackTree.size();
+
+			Assert::IsFalse(redBlackTree.exists(deletedValue), L"Value still in tree");
+			Assert::AreNotEqual(sizeBefore, sizeAfter);
+			Assert::AreEqual(sizeBefore - 1, sizeAfter);
 		}
 	};
 }
