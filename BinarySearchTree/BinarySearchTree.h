@@ -39,6 +39,8 @@ public:
 
 	friend void operator<<(std::ostream& os, const BinarySearchTree& binSearchTree);
 
+	Node* successor(Node* node);
+
 private:
 	Node* m_root;
 

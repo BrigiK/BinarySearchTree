@@ -117,6 +117,33 @@ std::pair<BinarySearchTree::Node*, BinarySearchTree::Node*> BinarySearchTree::mi
 	return std::make_pair(currentNode, currentParent);
 }
 
+BinarySearchTree::Node * BinarySearchTree::successor(Node* node)
+{
+	if (node->right != nullptr)
+	{
+		return min(node->right, node).first;
+	}
+
+	Node* successor = nullptr;
+
+	while (m_root != nullptr)
+	{
+		if (node->value < m_root->value)
+		{
+			successor = m_root;
+			m_root = m_root->left;
+		}
+		else if (node->value > m_root->value)
+		{
+			m_root = m_root->right;
+		}
+		else
+			break;
+	}
+
+	return successor;
+}
+
 void BinarySearchTree::remove(int value)
 {
 	if (m_root == nullptr)

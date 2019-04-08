@@ -340,5 +340,23 @@ namespace BinarySearchTreeTests
 			std::string expected = "";
 			Assert::AreEqual(expected, strStream.str());
 		}
+
+		TEST_METHOD(InorderSuccessor)
+		{
+			BinarySearchTree binSTree;
+
+			binSTree.insert(20);
+			binSTree.insert(8);
+			binSTree.insert(4);
+			binSTree.insert(12);
+			binSTree.insert(10);
+			binSTree.insert(14);
+			binSTree.insert(22);
+
+			binSTree.find(14);
+			bool exists = binSTree.exists(10);
+
+			Assert::IsTrue(exists, L"Value not found in tree");
+		}
 	};
 }
