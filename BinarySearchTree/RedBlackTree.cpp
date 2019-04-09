@@ -137,101 +137,6 @@ RedBlackTree::Node* RedBlackTree::successor(Node* node)
 	return successor;
 }
 
-void RedBlackTree::fixStructure(Node* node)
-{
-	Node* uncle = nullptr;
-	while (node != m_root && node->color == Node::Color::Black)
-	{
-		if (node == node->parent->left)
-		{
-			// uncl?
-			uncle = node->parent->right;
-
-			if (uncle->color == Node::Color::Red)
-			{
-				uncle->color = Node::Color::Black;
-				node->parent->color = Node::Color::Red;
-				rotateLeft(node->parent);
-				uncle = node->parent->right;
-			}
-
-			// uncl?
-			if ((uncle->left == nullptr || uncle->left->color == Node::Color::Black) &&
-				(uncle->right == nullptr || uncle->right->color == Node::Color::Black))
-			{
-				uncle->color = Node::Color::Red;
-				node = node->parent;
-			}
-			else
-			{
-				if (uncle->right == nullptr || uncle->right->color == Node::Color::Black)
-				{
-					if(uncle->left != nullptr)
-					{
-						uncle->left->color = Node::Color::Black;
-					}
-					
-					uncle->color = Node::Color::Red;
-					rotateRight(uncle);
-					// uncl?
-					uncle = node->parent->right;
-				}
-				uncle->color = node->parent->color;
-				node->parent->color = Node::Color::Black;
-				if (uncle->right != nullptr)
-				{
-					uncle->right->color = Node::Color::Black;
-				}
-				rotateLeft(node->parent);
-				node = m_root;
-			}
-		}
-		else
-		{
-			if (node == node->parent->right)
-			{
-				uncle = node->parent->left;
-
-				if (uncle->color == Node::Color::Red)
-				{
-					uncle->color = Node::Color::Black;
-					node->parent->color = Node::Color::Red;
-					rotateRight(node->parent);
-					uncle = node->parent->left;
-				}
-				if ((uncle->right == nullptr || uncle->right->color == Node::Color::Black) && 
-					(uncle->left == nullptr || uncle->left->color == Node::Color::Black))
-				{
-					uncle->color = Node::Color::Red;
-					node = node->parent;
-				}
-				else
-				{
-					if (uncle->left == nullptr || uncle->left->color == Node::Color::Black)
-					{
-						if (uncle->right != nullptr)
-						{
-							uncle->right->color = Node::Color::Black;
-						}
-						uncle->color = Node::Color::Red;
-						rotateLeft(uncle);
-						uncle = node->parent->left;
-					}
-					uncle->color = node->parent->color;
-					node->parent->color = Node::Color::Black;
-					if (uncle->left != nullptr)
-					{
-						uncle->left->color = Node::Color::Black;
-					}
-					rotateRight(node->parent);
-					node = m_root;
-				}
-			}
-		}
-	}
-	node->color = Node::Color::Black;
-}
-
 void RedBlackTree::remove(int value)
 {
 	if (m_root == nullptr)
@@ -473,4 +378,99 @@ void RedBlackTree::rearrange(Node* currentNode)
 	}
 
 	m_root->color = Node::Color::Black;
+}
+
+void RedBlackTree::fixStructure(Node* node)
+{
+	Node* uncle = nullptr;
+	while (node != m_root && node->color == Node::Color::Black)
+	{
+		if (node == node->parent->left)
+		{
+			// uncl?
+			uncle = node->parent->right;
+
+			if (uncle->color == Node::Color::Red)
+			{
+				uncle->color = Node::Color::Black;
+				node->parent->color = Node::Color::Red;
+				rotateLeft(node->parent);
+				uncle = node->parent->right;
+			}
+
+			// uncl?
+			if ((uncle->left == nullptr || uncle->left->color == Node::Color::Black) &&
+				(uncle->right == nullptr || uncle->right->color == Node::Color::Black))
+			{
+				uncle->color = Node::Color::Red;
+				node = node->parent;
+			}
+			else
+			{
+				if (uncle->right == nullptr || uncle->right->color == Node::Color::Black)
+				{
+					if (uncle->left != nullptr)
+					{
+						uncle->left->color = Node::Color::Black;
+					}
+
+					uncle->color = Node::Color::Red;
+					rotateRight(uncle);
+					// uncl?
+					uncle = node->parent->right;
+				}
+				uncle->color = node->parent->color;
+				node->parent->color = Node::Color::Black;
+				if (uncle->right != nullptr)
+				{
+					uncle->right->color = Node::Color::Black;
+				}
+				rotateLeft(node->parent);
+				node = m_root;
+			}
+		}
+		else
+		{
+			if (node == node->parent->right)
+			{
+				uncle = node->parent->left;
+
+				if (uncle->color == Node::Color::Red)
+				{
+					uncle->color = Node::Color::Black;
+					node->parent->color = Node::Color::Red;
+					rotateRight(node->parent);
+					uncle = node->parent->left;
+				}
+				if ((uncle->right == nullptr || uncle->right->color == Node::Color::Black) &&
+					(uncle->left == nullptr || uncle->left->color == Node::Color::Black))
+				{
+					uncle->color = Node::Color::Red;
+					node = node->parent;
+				}
+				else
+				{
+					if (uncle->left == nullptr || uncle->left->color == Node::Color::Black)
+					{
+						if (uncle->right != nullptr)
+						{
+							uncle->right->color = Node::Color::Black;
+						}
+						uncle->color = Node::Color::Red;
+						rotateLeft(uncle);
+						uncle = node->parent->left;
+					}
+					uncle->color = node->parent->color;
+					node->parent->color = Node::Color::Black;
+					if (uncle->left != nullptr)
+					{
+						uncle->left->color = Node::Color::Black;
+					}
+					rotateRight(node->parent);
+					node = m_root;
+				}
+			}
+		}
+	}
+	node->color = Node::Color::Black;
 }

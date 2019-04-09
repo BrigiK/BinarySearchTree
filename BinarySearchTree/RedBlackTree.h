@@ -37,7 +37,6 @@ public:
 	Node* find(int value) const;
 	static Node* min(Node* node);
 	static Node* successor(Node* node);
-	void fixStructure(Node* node);
 	void remove(int value);
 	int size() const;
 
@@ -47,6 +46,7 @@ private:
 	void rotateLeft(Node* currentNode);
 	void rotateRight(Node* currentNode);
 	void rearrange(Node* currentNode);
+	void fixStructure(Node* node);
 
 private:
 	Node* m_root;
