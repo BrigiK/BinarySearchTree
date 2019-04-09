@@ -11,7 +11,6 @@ RedBlackTree::~RedBlackTree()
 	if (m_root)
 	{
 		delete m_root;
-		m_root = nullptr;
 	}
 }
 
@@ -20,12 +19,10 @@ RedBlackTree::Node::~Node()
 	if (left)
 	{
 		delete left;
-		left = nullptr;
 	}
 	if (right)
 	{
 		delete right;
-		right = nullptr;
 	}
 }
 
@@ -81,7 +78,7 @@ void RedBlackTree::insert(int value)
 	rearrange(newNode);
 }
 
-bool RedBlackTree::exists(int value)
+bool RedBlackTree::exists(int value) const
 {
 	if (find(value))
 	{
@@ -91,7 +88,7 @@ bool RedBlackTree::exists(int value)
 	return false;
 }
 
-RedBlackTree::Node* RedBlackTree::find(int value)
+RedBlackTree::Node* RedBlackTree::find(int value) const
 {
 	Node* currentNode = m_root;
 
@@ -112,21 +109,200 @@ RedBlackTree::Node* RedBlackTree::find(int value)
 
 RedBlackTree::Node* RedBlackTree::min(Node* node)
 {
-	Node* currentnode = node;
+	Node* currentNode = node;
 
-	while (currentnode->left != nullptr)
+	while (currentNode->left != nullptr)
 	{
-		currentnode = currentnode->left;
+		currentNode = currentNode->left;
 	}
 
-	return currentnode;
+	return currentNode;
+}
+
+RedBlackTree::Node* RedBlackTree::successor(Node* node)
+{
+	if (node->right != nullptr)
+	{
+		return min(node->right);
+	}
+
+	Node* successor = node->parent;
+
+	while (successor != nullptr && node == successor->right)
+	{
+		node = successor;
+		successor = successor->parent;
+	}
+
+	return successor;
+}
+
+void RedBlackTree::fixStructure(Node* node)
+{
+	Node* uncle = nullptr;
+	while (node != m_root && node->color == Node::Color::Black)
+	{
+		if (node == node->parent->left)
+		{
+			// uncl?
+			uncle = node->parent->right;
+
+			if (uncle->color == Node::Color::Red)
+			{
+				uncle->color = Node::Color::Black;
+				node->parent->color = Node::Color::Red;
+				rotateLeft(node->parent);
+				uncle = node->parent->right;
+			}
+
+			// uncl?
+			if ((uncle->left == nullptr || uncle->left->color == Node::Color::Black) &&
+				(uncle->right == nullptr || uncle->right->color == Node::Color::Black))
+			{
+				uncle->color = Node::Color::Red;
+				node = node->parent;
+			}
+			else
+			{
+				if (uncle->right == nullptr || uncle->right->color == Node::Color::Black)
+				{
+					if(uncle->left != nullptr)
+					{
+						uncle->left->color = Node::Color::Black;
+					}
+					
+					uncle->color = Node::Color::Red;
+					rotateRight(uncle);
+					// uncl?
+					uncle = node->parent->right;
+				}
+				uncle->color = node->parent->color;
+				node->parent->color = Node::Color::Black;
+				if (uncle->right != nullptr)
+				{
+					uncle->right->color = Node::Color::Black;
+				}
+				rotateLeft(node->parent);
+				node = m_root;
+			}
+		}
+		else
+		{
+			if (node == node->parent->right)
+			{
+				uncle = node->parent->left;
+
+				if (uncle->color == Node::Color::Red)
+				{
+					uncle->color = Node::Color::Black;
+					node->parent->color = Node::Color::Red;
+					rotateRight(node->parent);
+					uncle = node->parent->left;
+				}
+				if ((uncle->right == nullptr || uncle->right->color == Node::Color::Black) && 
+					(uncle->left == nullptr || uncle->left->color == Node::Color::Black))
+				{
+					uncle->color = Node::Color::Red;
+					node = node->parent;
+				}
+				else
+				{
+					if (uncle->left == nullptr || uncle->left->color == Node::Color::Black)
+					{
+						if (uncle->right != nullptr)
+						{
+							uncle->right->color = Node::Color::Black;
+						}
+						uncle->color = Node::Color::Red;
+						rotateLeft(uncle);
+						uncle = node->parent->left;
+					}
+					uncle->color = node->parent->color;
+					node->parent->color = Node::Color::Black;
+					if (uncle->left != nullptr)
+					{
+						uncle->left->color = Node::Color::Black;
+					}
+					rotateRight(node->parent);
+					node = m_root;
+				}
+			}
+		}
+	}
+	node->color = Node::Color::Black;
 }
 
 void RedBlackTree::remove(int value)
 {
+	if (m_root == nullptr)
+	{
+		return;
+	}
+
+	if (!exists(value))
+	{
+		return;
+	}
+
+	Node* crtNode = find(value);
+	Node* nodeToBeDeleted = nullptr;
+	Node* descendent = nullptr;
+
+	if (crtNode->left == nullptr || crtNode->right == nullptr)
+	{
+		nodeToBeDeleted = crtNode;
+	}
+	else
+	{
+		nodeToBeDeleted = successor(crtNode);
+	}
+
+	if (nodeToBeDeleted->left != nullptr)
+	{
+		descendent = nodeToBeDeleted->left;
+	}
+	else
+	{
+		descendent = nodeToBeDeleted->right;
+	}
+
+	if (descendent != nullptr)
+	{
+		descendent->parent = nodeToBeDeleted->parent;
+	}
+
+	if (nodeToBeDeleted->parent == nullptr)
+	{
+		m_root = descendent;
+	}
+	else
+	{
+		if (nodeToBeDeleted == nodeToBeDeleted->parent->left)
+		{
+			nodeToBeDeleted->parent->left = descendent;
+		}
+		else
+		{
+			nodeToBeDeleted->parent->right = descendent;
+		}
+	}
+
+	if (crtNode->value < nodeToBeDeleted->value)
+	{
+		crtNode->value = nodeToBeDeleted->value;
+	}
+
+	if (descendent != nullptr && nodeToBeDeleted->color == Node::Color::Black)
+	{
+		fixStructure(descendent);
+	}
+
+	nodeToBeDeleted->left = nullptr;
+	nodeToBeDeleted->right = nullptr;
+	delete nodeToBeDeleted;
 }
 
-int RedBlackTree::size()
+int RedBlackTree::size() const
 {
 	int count = 0;
 

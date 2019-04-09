@@ -33,11 +33,13 @@ public:
 	~RedBlackTree();
 
 	void insert(int value);
-	bool exists(int value);
-	Node* find(int value);
+	bool exists(int value) const;
+	Node* find(int value) const;
 	static Node* min(Node* node);
+	static Node* successor(Node* node);
+	void fixStructure(Node* node);
 	void remove(int value);
-	int size();
+	int size() const;
 
 	friend void operator<<(std::ostream& os, const RedBlackTree& redBlackTree);
 
