@@ -20,12 +20,12 @@ private:
 			Black
 		};
 
-		Node(KeyType value, Node::Color color) : value(value), color(color), left(nullptr), right(nullptr), parent(nullptr) {}
+		Node(KeyType key, Node::Color color) : key(key), color(color), left(nullptr), right(nullptr), parent(nullptr) {}
 		Node(const Node &node) = delete;
 		Node& operator=(const Node &node) = delete;
 		~Node();
 
-		KeyType value;
+		KeyType key;
 		Node::Color color;
 		Node* left;
 		Node* right;
@@ -38,12 +38,12 @@ public:
 	RedBlackTree& operator=(const RedBlackTree &redBlackTree) = delete;
 	~RedBlackTree();
 
-	void insert(KeyType value);
-	bool exists(KeyType value) const;
-	Node* find(KeyType value) const;
+	void insert(KeyType key);
+	bool exists(KeyType key) const;
+	Node* find(KeyType key) const;
 	static Node* min(Node* node);
 	static Node* successor(Node* node);
-	void remove(KeyType value);
+	void remove(KeyType key);
 	int size() const;
 
 	friend void operator<<(std::ostream& os, const RedBlackTree<KeyType>& redBlackTree)
@@ -63,7 +63,7 @@ public:
 			{
 				RedBlackTree<KeyType>::Node* top = stack.top();
 				stack.pop();
-				os << top->value << " ";
+				os << top->key << " ";
 				currentNode = top->right;
 			}
 		}
@@ -135,30 +135,30 @@ RedBlackTree<KeyType>::~RedBlackTree()
 }
 
 template <class KeyType>
-void RedBlackTree<KeyType>::insert(KeyType value)
+void RedBlackTree<KeyType>::insert(KeyType key)
 {
 	if (m_root == nullptr)
 	{
-		m_root = new Node(value, Node::Color::Black);
+		m_root = new Node(key, Node::Color::Black);
 		return;
 	}
 
 	Node* currentNode = m_root;
 
-	if (currentNode->value == value)
+	if (currentNode->key == key)
 	{
 		return;
 	}
 
 	Node* newNode = nullptr;
 
-	while (currentNode->value != value)
+	while (currentNode->key != key)
 	{
-		if (value < currentNode->value)
+		if (key < currentNode->key)
 		{
 			if (currentNode->left == nullptr)
 			{
-				newNode = new Node(value, RedBlackTree::Node::Color::Red);
+				newNode = new Node(key, RedBlackTree::Node::Color::Red);
 				currentNode->left = newNode;
 				newNode->parent = currentNode;
 				break;
@@ -169,11 +169,11 @@ void RedBlackTree<KeyType>::insert(KeyType value)
 			}
 		}
 
-		if (value > currentNode->value)
+		if (key > currentNode->key)
 		{
 			if (currentNode->right == nullptr)
 			{
-				newNode = new Node(value, RedBlackTree::Node::Color::Red);
+				newNode = new Node(key, RedBlackTree::Node::Color::Red);
 				currentNode->right = newNode;
 				newNode->parent = currentNode;
 				break;
@@ -188,9 +188,9 @@ void RedBlackTree<KeyType>::insert(KeyType value)
 }
 
 template <class KeyType>
-bool RedBlackTree<KeyType>::exists(KeyType value) const
+bool RedBlackTree<KeyType>::exists(KeyType key) const
 {
-	if (find(value))
+	if (find(key))
 	{
 		return true;
 	}
@@ -199,13 +199,13 @@ bool RedBlackTree<KeyType>::exists(KeyType value) const
 }
 
 template <class KeyType>
-typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::find(KeyType value) const
+typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::find(KeyType key) const
 {
 	Node* currentNode = m_root;
 
-	while (currentNode != nullptr && currentNode->value != value)
+	while (currentNode != nullptr && currentNode->key != key)
 	{
-		if (value < currentNode->value)
+		if (key < currentNode->key)
 		{
 			currentNode = currentNode->left;
 		}
@@ -251,19 +251,19 @@ typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::successor(Node* nod
 }
 
 template <class KeyType>
-void RedBlackTree<KeyType>::remove(KeyType value)
+void RedBlackTree<KeyType>::remove(KeyType key)
 {
 	if (m_root == nullptr)
 	{
 		return;
 	}
 
-	if (!exists(value))
+	if (!exists(key))
 	{
 		return;
 	}
 
-	Node* crtNode = find(value);
+	Node* crtNode = find(key);
 	Node* nodeToBeDeleted = nullptr;
 	Node* descendent = nullptr;
 
@@ -306,9 +306,9 @@ void RedBlackTree<KeyType>::remove(KeyType value)
 		}
 	}
 
-	if (crtNode->value < nodeToBeDeleted->value)
+	if (crtNode->key < nodeToBeDeleted->key)
 	{
-		crtNode->value = nodeToBeDeleted->value;
+		crtNode->key = nodeToBeDeleted->key;
 	}
 
 	if (descendent != nullptr && nodeToBeDeleted->color == Node::Color::Black)
