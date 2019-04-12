@@ -2,13 +2,10 @@
 #include <iostream>
 #include<stack>
 
-template <class KeyType>
+template <class KeyType, class ValueType>
 class RedBlackTreePrivate;
 
-template <class KeyType>
-class RedBlackTree;
-
-template <class KeyType>
+template <class KeyType, class ValueType>
 class RedBlackTree
 {
 private:
@@ -20,12 +17,13 @@ private:
 			Black
 		};
 
-		Node(KeyType key, Node::Color color) : key(key), color(color), left(nullptr), right(nullptr), parent(nullptr) {}
+		Node(KeyType key, ValueType value, Node::Color color) : key(key), value(value), color(color), left(nullptr), right(nullptr), parent(nullptr) {}
 		Node(const Node &node) = delete;
 		Node& operator=(const Node &node) = delete;
 		~Node();
 
 		KeyType key;
+		ValueType value;
 		Node::Color color;
 		Node* left;
 		Node* right;
@@ -38,7 +36,7 @@ public:
 	RedBlackTree& operator=(const RedBlackTree &redBlackTree) = delete;
 	~RedBlackTree();
 
-	void insert(KeyType key);
+	void insert(KeyType key, ValueType value);
 	bool exists(KeyType key) const;
 	Node* find(KeyType key) const;
 	static Node* min(Node* node);
@@ -46,10 +44,10 @@ public:
 	void remove(KeyType key);
 	int size() const;
 
-	friend void operator<<(std::ostream& os, const RedBlackTree<KeyType>& redBlackTree)
+	friend void operator<<(std::ostream& os, const RedBlackTree<KeyType, ValueType>& redBlackTree)
 	{
-		std::stack<RedBlackTree<KeyType>::Node*> stack;
-		RedBlackTree<KeyType>::Node* currentNode = redBlackTree.m_root;
+		std::stack<RedBlackTree<KeyType, ValueType>::Node*> stack;
+		RedBlackTree<KeyType, ValueType>::Node* currentNode = redBlackTree.m_root;
 
 		while (!stack.empty() || currentNode != nullptr)
 		{
@@ -61,7 +59,7 @@ public:
 
 			if (!stack.empty())
 			{
-				RedBlackTree<KeyType>::Node* top = stack.top();
+				RedBlackTree<KeyType, ValueType>::Node* top = stack.top();
 				stack.pop();
 				os << top->key << " ";
 				currentNode = top->right;
@@ -78,37 +76,37 @@ private:
 private:
 	Node* m_root;
 
-	friend class RedBlackTreePrivate<KeyType>;
+	friend class RedBlackTreePrivate<KeyType, ValueType>;
 };
 
 // Use this class only for unit testing
-template <class KeyType>
+template <class KeyType, class ValueType>
 class RedBlackTreePrivate
 {
 public:
-	static void RotateLeftRoot(RedBlackTree<KeyType>& tree)
+	static void RotateLeftRoot(RedBlackTree<KeyType, ValueType>& tree)
 	{
 		tree.rotateLeft(tree.m_root);
 	}
 
-	static void RotateLeftRootLeft(RedBlackTree<KeyType>& tree)
+	static void RotateLeftRootLeft(RedBlackTree<KeyType, ValueType>& tree)
 	{
 		tree.rotateLeft(tree.m_root->left);
 	}
 
-	static void RotateRightRoot(RedBlackTree<KeyType>& tree)
+	static void RotateRightRoot(RedBlackTree<KeyType, ValueType>& tree)
 	{
 		tree.rotateRight(tree.m_root);
 	}
 
-	static void RotateRightRootRight(RedBlackTree<KeyType>& tree)
+	static void RotateRightRootRight(RedBlackTree<KeyType, ValueType>& tree)
 	{
 		tree.rotateRight(tree.m_root->right);
 	}
 };
 
-template <class KeyType>
-RedBlackTree<KeyType>::Node::~Node()
+template <class KeyType, class ValueType>
+RedBlackTree<KeyType, ValueType>::Node::~Node()
 {
 	if (left)
 	{
@@ -120,13 +118,13 @@ RedBlackTree<KeyType>::Node::~Node()
 	}
 }
 
-template <class KeyType>
-RedBlackTree<KeyType>::RedBlackTree() : m_root(nullptr)
+template <class KeyType, class ValueType>
+RedBlackTree<KeyType, ValueType>::RedBlackTree() : m_root(nullptr)
 {
 }
 
-template <class KeyType>
-RedBlackTree<KeyType>::~RedBlackTree()
+template <class KeyType, class ValueType>
+RedBlackTree<KeyType, ValueType>::~RedBlackTree()
 {
 	if (m_root)
 	{
@@ -134,12 +132,12 @@ RedBlackTree<KeyType>::~RedBlackTree()
 	}
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::insert(KeyType key)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::insert(KeyType key, ValueType value) //!!!!!!
 {
 	if (m_root == nullptr)
 	{
-		m_root = new Node(key, Node::Color::Black);
+		m_root = new Node(key, value, Node::Color::Black);
 		return;
 	}
 
@@ -158,7 +156,7 @@ void RedBlackTree<KeyType>::insert(KeyType key)
 		{
 			if (currentNode->left == nullptr)
 			{
-				newNode = new Node(key, RedBlackTree::Node::Color::Red);
+				newNode = new Node(key, value, RedBlackTree::Node::Color::Red);
 				currentNode->left = newNode;
 				newNode->parent = currentNode;
 				break;
@@ -173,7 +171,7 @@ void RedBlackTree<KeyType>::insert(KeyType key)
 		{
 			if (currentNode->right == nullptr)
 			{
-				newNode = new Node(key, RedBlackTree::Node::Color::Red);
+				newNode = new Node(key, value, RedBlackTree::Node::Color::Red);
 				currentNode->right = newNode;
 				newNode->parent = currentNode;
 				break;
@@ -187,8 +185,8 @@ void RedBlackTree<KeyType>::insert(KeyType key)
 	rearrange(newNode);
 }
 
-template <class KeyType>
-bool RedBlackTree<KeyType>::exists(KeyType key) const
+template <class KeyType, class ValueType>
+bool RedBlackTree<KeyType, ValueType>::exists(KeyType key) const
 {
 	if (find(key))
 	{
@@ -198,8 +196,8 @@ bool RedBlackTree<KeyType>::exists(KeyType key) const
 	return false;
 }
 
-template <class KeyType>
-typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::find(KeyType key) const
+template <class KeyType, class ValueType>
+typename RedBlackTree<KeyType, ValueType>::Node* RedBlackTree<KeyType, ValueType>::find(KeyType key) const
 {
 	Node* currentNode = m_root;
 
@@ -218,8 +216,8 @@ typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::find(KeyType key) c
 	return currentNode;
 }
 
-template <class KeyType>
-typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::min(Node* node)
+template <class KeyType, class ValueType>
+typename RedBlackTree<KeyType, ValueType>::Node* RedBlackTree<KeyType, ValueType>::min(Node* node)
 {
 	Node* currentNode = node;
 
@@ -231,8 +229,8 @@ typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::min(Node* node)
 	return currentNode;
 }
 
-template <class KeyType>
-typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::successor(Node* node)
+template <class KeyType, class ValueType>
+typename RedBlackTree<KeyType, ValueType>::Node* RedBlackTree<KeyType, ValueType>::successor(Node* node)
 {
 	if (node->right != nullptr)
 	{
@@ -250,8 +248,8 @@ typename RedBlackTree<KeyType>::Node* RedBlackTree<KeyType>::successor(Node* nod
 	return successor;
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::remove(KeyType key)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::remove(KeyType key)
 {
 	if (m_root == nullptr)
 	{
@@ -321,8 +319,8 @@ void RedBlackTree<KeyType>::remove(KeyType key)
 	delete nodeToBeDeleted;
 }
 
-template <class KeyType>
-int RedBlackTree<KeyType>::size() const
+template <class KeyType, class ValueType>
+int RedBlackTree<KeyType, ValueType>::size() const
 {
 	int count = 0;
 
@@ -349,8 +347,8 @@ int RedBlackTree<KeyType>::size() const
 	return count;
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::rotateLeft(Node* currentNode)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::rotateLeft(Node* currentNode)
 {
 	if (currentNode->right == nullptr)
 	{
@@ -381,8 +379,8 @@ void RedBlackTree<KeyType>::rotateLeft(Node* currentNode)
 	currentNode->parent = currentNodeRight;
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::rotateRight(Node* currentNode)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::rotateRight(Node* currentNode)
 {
 	if (currentNode->left == nullptr)
 	{
@@ -413,8 +411,8 @@ void RedBlackTree<KeyType>::rotateRight(Node* currentNode)
 	currentNode->parent = currentNodeLeft;
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::rearrange(Node* currentNode)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::rearrange(Node* currentNode)
 {
 	while (currentNode->parent != nullptr && currentNode->parent->color == Node::Color::Red)
 	{
@@ -475,8 +473,8 @@ void RedBlackTree<KeyType>::rearrange(Node* currentNode)
 	m_root->color = Node::Color::Black;
 }
 
-template <class KeyType>
-void RedBlackTree<KeyType>::fixStructure(Node* node)
+template <class KeyType, class ValueType>
+void RedBlackTree<KeyType, ValueType>::fixStructure(Node* node)
 {
 	Node* uncle = nullptr;
 	while (node != m_root && node->color == Node::Color::Black)
