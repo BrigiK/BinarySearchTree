@@ -14,10 +14,10 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(InsertExists)
 		{
-			RedBlackTree<int> redBlackTree;
+			RedBlackTree<int, std::string> redBlackTree;
 			const int insertedValue = 10;
 
-			redBlackTree.insert(insertedValue);
+			redBlackTree.insert(insertedValue, "");
 			bool exists = redBlackTree.exists(insertedValue);
 
 			Assert::IsTrue(exists, L"Value not found in tree");
@@ -25,15 +25,15 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(InsertExistsLargerTree)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(7);
-			redBlackTree.insert(3);
-			redBlackTree.insert(18);
-			redBlackTree.insert(10);
-			redBlackTree.insert(22);
-			redBlackTree.insert(8);
-			redBlackTree.insert(11);
-			redBlackTree.insert(26);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(7, "");
+			redBlackTree.insert(3, "");
+			redBlackTree.insert(18, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(22, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(11, "");
+			redBlackTree.insert(26, "");
 
 			bool exists = redBlackTree.exists(18);
 			Assert::IsTrue(exists, L"Value not found in tree");
@@ -41,13 +41,13 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(InsertExistsLargerTree2)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(11);
-			redBlackTree.insert(1);
-			redBlackTree.insert(14);
-			redBlackTree.insert(2);
-			redBlackTree.insert(7);
-			redBlackTree.insert(15);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(11, "");
+			redBlackTree.insert(1, "");
+			redBlackTree.insert(14, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(7, "");
+			redBlackTree.insert(15, "");
 
 			bool exists = redBlackTree.exists(14);
 			Assert::IsTrue(exists, L"Value not found in tree");
@@ -55,17 +55,17 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(InsertAllCases)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(8);
-			redBlackTree.insert(5);
-			redBlackTree.insert(15);
-			redBlackTree.insert(12);
-			redBlackTree.insert(19);
-			redBlackTree.insert(9);
-			redBlackTree.insert(13);
-			redBlackTree.insert(23);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(15, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(19, "");
+			redBlackTree.insert(9, "");
+			redBlackTree.insert(13, "");
+			redBlackTree.insert(23, "");
 
-			redBlackTree.insert(10);
+			redBlackTree.insert(10, "");
 			bool exists = redBlackTree.exists(10);
 			Assert::IsTrue(exists, L"Value not found in tree");
 
@@ -78,17 +78,17 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(InsertAllCasesStrings)
 		{
-			RedBlackTree<std::string> redBlackTree;
-			redBlackTree.insert("hagyma");
-			redBlackTree.insert("embor");
-			redBlackTree.insert("pityi");
-			redBlackTree.insert("lukas");
-			redBlackTree.insert("trutyi");
-			redBlackTree.insert("ize");
-			redBlackTree.insert("mami");
-			redBlackTree.insert("yambikus");
+			RedBlackTree<std::string, int> redBlackTree;
+			redBlackTree.insert("hagyma", 0);
+			redBlackTree.insert("embor", 0);
+			redBlackTree.insert("pityi", 0);
+			redBlackTree.insert("lukas", 0);
+			redBlackTree.insert("trutyi", 0);
+			redBlackTree.insert("ize", 0);
+			redBlackTree.insert("mami", 0);
+			redBlackTree.insert("yambikus", 0);
 
-			redBlackTree.insert("jubi");
+			redBlackTree.insert("jubi", 0);
 			bool exists = redBlackTree.exists("jubi");
 			Assert::IsTrue(exists, L"Value not found in tree");
 
@@ -101,16 +101,16 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(LeftRotateWithRoot)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(5);
-			redBlackTree.insert(2);
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(12);
-			redBlackTree.insert(6);
-			redBlackTree.insert(9);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(6, "");
+			redBlackTree.insert(9, "");
 
-			RedBlackTreePrivate<int>::RotateLeftRoot(redBlackTree);
+			RedBlackTreePrivate<int, std::string>::RotateLeftRoot(redBlackTree);
 
 			std::stringstream strStream;
 			strStream << redBlackTree;
@@ -121,16 +121,16 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(LeftRotateNotRoot)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(5);
-			redBlackTree.insert(2);
-			redBlackTree.insert(8);
-			redBlackTree.insert(6);
-			redBlackTree.insert(9);
-			redBlackTree.insert(12);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(6, "");
+			redBlackTree.insert(9, "");
+			redBlackTree.insert(12, "");
 
-			RedBlackTreePrivate<int>::RotateLeftRootLeft(redBlackTree);
+			RedBlackTreePrivate<int, std::string>::RotateLeftRootLeft(redBlackTree);
 
 			std::stringstream strStream;
 			strStream << redBlackTree;
@@ -141,16 +141,16 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RightRotateWithRoot)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(5);
-			redBlackTree.insert(2);
-			redBlackTree.insert(8);
-			redBlackTree.insert(6);
-			redBlackTree.insert(9);
-			redBlackTree.insert(12);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(6, "");
+			redBlackTree.insert(9, "");
+			redBlackTree.insert(12, "");
 
-			RedBlackTreePrivate<int>::RotateRightRoot(redBlackTree);
+			RedBlackTreePrivate<int, std::string>::RotateRightRoot(redBlackTree);
 
 			std::stringstream strStream;
 			strStream << redBlackTree;
@@ -161,7 +161,7 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RightRotateNotRoot)
 		{
-			RedBlackTree<int> redBlackTree;
+			RedBlackTree<int, std::string> redBlackTree;
 			/*redBlackTree.insert(7);
 			redBlackTree.insert(18);
 			redBlackTree.insert(11);
@@ -172,15 +172,15 @@ namespace RedBlackTreeTests
 			redBlackTree.insert(19);
 			redBlackTree.insert(22);
 			redBlackTree.insert(20);*/
-			redBlackTree.insert(5);
-			redBlackTree.insert(2);
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(6);
-			redBlackTree.insert(9);
-			redBlackTree.insert(12);
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(6, "");
+			redBlackTree.insert(9, "");
+			redBlackTree.insert(12, "");
 
-			RedBlackTreePrivate<int>::RotateRightRootRight(redBlackTree);
+			RedBlackTreePrivate<int, std::string>::RotateRightRootRight(redBlackTree);
 
 			std::stringstream strStream;
 			strStream << redBlackTree;
@@ -191,12 +191,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RotateLeft)
 		{
-			RedBlackTree<int> tree;
-			tree.insert(5);
-			tree.insert(6);
-			tree.insert(3);
-			tree.insert(4);
-			tree.insert(2);
+			RedBlackTree<int, std::string> tree;
+			tree.insert(5, "");
+			tree.insert(6, "");
+			tree.insert(3, "");
+			tree.insert(4, "");
+			tree.insert(2, "");
 
 			std::stringstream strStream;
 			strStream << tree;
@@ -207,12 +207,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedLeaf)
 		{
-			RedBlackTree<int> redBlackTree;
+			RedBlackTree<int, std::string> redBlackTree;
 			const int valueToBeRemoved = 10;
 
-			redBlackTree.insert(valueToBeRemoved - 2);
-			redBlackTree.insert(valueToBeRemoved);
-			redBlackTree.insert(valueToBeRemoved + 2);
+			redBlackTree.insert(valueToBeRemoved - 2, "");
+			redBlackTree.insert(valueToBeRemoved, "");
+			redBlackTree.insert(valueToBeRemoved + 2, "");
 			int sizeBefore = redBlackTree.size();
 
 			redBlackTree.remove(valueToBeRemoved + 2);
@@ -225,10 +225,10 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRootLeftTreeRight)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(9);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(9, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -242,10 +242,10 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRootLeftTreeLeft)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(7);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(7, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -259,10 +259,10 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRootRightTreeLeft)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(12);
-			redBlackTree.insert(11);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(11, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -276,10 +276,10 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRootRightTreeRight)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(10);
-			redBlackTree.insert(12);
-			redBlackTree.insert(13);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(13, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -293,11 +293,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildLeftTreeRight)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(9);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(9, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -311,11 +311,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildLeftTreeLeft)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(8);
-			redBlackTree.insert(7);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(8, "");
+			redBlackTree.insert(7, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -329,11 +329,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRightTreeLeft)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(5);
-			redBlackTree.insert(10);
-			redBlackTree.insert(12);
-			redBlackTree.insert(11);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(11, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -347,11 +347,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemovedWithOneChildRightTreeRight)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(5);
-			redBlackTree.insert(10);
-			redBlackTree.insert(12);
-			redBlackTree.insert(13);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(12, "");
+			redBlackTree.insert(13, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -366,12 +366,12 @@ namespace RedBlackTreeTests
 		TEST_METHOD(RemovedWithTwoChildsFromLeft)
 		{
 			int deletedValue = 5;
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(11);
-			redBlackTree.insert(deletedValue);
-			redBlackTree.insert(2);
-			redBlackTree.insert(7);
-			redBlackTree.insert(10);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(11, "");
+			redBlackTree.insert(deletedValue, "");
+			redBlackTree.insert(2, "");
+			redBlackTree.insert(7, "");
+			redBlackTree.insert(10, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -386,14 +386,14 @@ namespace RedBlackTreeTests
 		TEST_METHOD(RemovedWithTwoChildsFromRight)
 		{
 			int deletedValue = 16;
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(11);
-			redBlackTree.insert(deletedValue);
-			redBlackTree.insert(14);
-			redBlackTree.insert(23);
-			redBlackTree.insert(21);
-			redBlackTree.insert(24);
-			redBlackTree.insert(22);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(11, "");
+			redBlackTree.insert(deletedValue, "");
+			redBlackTree.insert(14, "");
+			redBlackTree.insert(23, "");
+			redBlackTree.insert(21, "");
+			redBlackTree.insert(24, "");
+			redBlackTree.insert(22, "");
 
 			int sizeBefore = redBlackTree.size();
 
@@ -407,11 +407,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveSimpleCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(10);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(10, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(10);
@@ -423,11 +423,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveNodeToBeDeletedBlackLeftChildBlack)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(35);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(35, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
@@ -439,12 +439,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveSiblingRedAndRightChildOfParent)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(30);
-			redBlackTree.insert(25);
-			redBlackTree.insert(35);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(25, "");
+			redBlackTree.insert(35, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(10);
@@ -456,12 +456,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveLeftLeftCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(15);
-			redBlackTree.insert(25);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(15, "");
+			redBlackTree.insert(25, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
@@ -473,11 +473,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveLeftRightCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(25);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(25, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
@@ -489,12 +489,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveRightRightCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(35);
-			redBlackTree.insert(50);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(35, "");
+			redBlackTree.insert(50, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
@@ -506,11 +506,11 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveRightLeftCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(30);
-			redBlackTree.insert(20);
-			redBlackTree.insert(40);
-			redBlackTree.insert(35);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(40, "");
+			redBlackTree.insert(35, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
@@ -522,12 +522,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveSiblingBlackBothChildrenBlack)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(61);
-			redBlackTree.insert(52);
-			redBlackTree.insert(85);
-			redBlackTree.insert(20);
-			redBlackTree.insert(55);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(61, "");
+			redBlackTree.insert(52, "");
+			redBlackTree.insert(85, "");
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(55, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(52);
@@ -539,12 +539,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveSiblingRedLeftCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(30);
-			redBlackTree.insert(5);
-			redBlackTree.insert(15);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(5, "");
+			redBlackTree.insert(15, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(10);
@@ -556,12 +556,12 @@ namespace RedBlackTreeTests
 
 		TEST_METHOD(RemoveSiblingRedRightCase)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(30);
-			redBlackTree.insert(25);
-			redBlackTree.insert(35);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(25, "");
+			redBlackTree.insert(35, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(10);
@@ -572,12 +572,12 @@ namespace RedBlackTreeTests
 		}
 		TEST_METHOD(RemoveRoot)
 		{
-			RedBlackTree<int> redBlackTree;
-			redBlackTree.insert(20);
-			redBlackTree.insert(10);
-			redBlackTree.insert(30);
-			redBlackTree.insert(25);
-			redBlackTree.insert(35);
+			RedBlackTree<int, std::string> redBlackTree;
+			redBlackTree.insert(20, "");
+			redBlackTree.insert(10, "");
+			redBlackTree.insert(30, "");
+			redBlackTree.insert(25, "");
+			redBlackTree.insert(35, "");
 
 			int sizeBefore = redBlackTree.size();
 			redBlackTree.remove(20);
