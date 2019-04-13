@@ -36,7 +36,7 @@ public:
 	RedBlackTree& operator=(const RedBlackTree &redBlackTree) = delete;
 	~RedBlackTree();
 
-	void insert(KeyType key, ValueType value);
+	Node* insert(KeyType key, ValueType value = ValueType());
 	bool exists(KeyType key) const;
 	Node* find(KeyType key) const;
 	static Node* min(Node* node);
@@ -133,19 +133,19 @@ RedBlackTree<KeyType, ValueType>::~RedBlackTree()
 }
 
 template <class KeyType, class ValueType>
-void RedBlackTree<KeyType, ValueType>::insert(KeyType key, ValueType value) //!!!!!!
+typename RedBlackTree<KeyType, ValueType>::Node* RedBlackTree<KeyType, ValueType>::insert(KeyType key, ValueType value) //!!!!!!
 {
 	if (m_root == nullptr)
 	{
 		m_root = new Node(key, value, Node::Color::Black);
-		return;
+		return m_root;
 	}
 
 	Node* currentNode = m_root;
 
 	if (currentNode->key == key)
 	{
-		return;
+		return currentNode;
 	}
 
 	Node* newNode = nullptr;
@@ -183,6 +183,7 @@ void RedBlackTree<KeyType, ValueType>::insert(KeyType key, ValueType value) //!!
 		}
 	}
 	rearrange(newNode);
+	return newNode;
 }
 
 template <class KeyType, class ValueType>
