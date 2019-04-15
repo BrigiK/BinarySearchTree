@@ -185,5 +185,27 @@ namespace mapTests
 
 			Assert::IsFalse(map.exists(120));
 		}
+
+		TEST_METHOD(ForEach)
+		{
+			map<std::string, int> myMap;
+			myMap.insert("Tuenty Five", 25);
+			myMap["Didd"] = 4;
+			myMap.insert("Brigi", 1);
+			myMap["Tways"] = 74;
+			myMap.insert("Diss", 8);
+			myMap["Iwn"] = 14;
+
+			std::stringstream strStream;
+
+			std::string expected = "Brigi 1 Didd 4 Diss 8 Iwn 14 Tuenty Five 25 Tways 74 ";
+
+			for (auto pair : myMap)
+			{
+				strStream << pair.first << " " << pair.second << " ";
+			}
+
+			Assert::AreEqual(expected, strStream.str());
+		}
 	};
 }
