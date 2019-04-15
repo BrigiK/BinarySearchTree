@@ -8,7 +8,7 @@ class RedBlackTreePrivate;
 template <class KeyType, class ValueType>
 class RedBlackTree
 {
-private:
+public:
 	struct Node
 	{
 		enum class Color : char
@@ -30,7 +30,6 @@ private:
 		Node* parent;
 	};
 
-public:
 	RedBlackTree();
 	RedBlackTree(const RedBlackTree &redBlackTree) = delete;
 	RedBlackTree& operator=(const RedBlackTree &redBlackTree) = delete;
@@ -43,6 +42,8 @@ public:
 	static Node* successor(Node* node);
 	void remove(KeyType key);
 	int size() const;
+	Node* getMinNode();
+	Node* getMaxNode();
 
 	friend void operator<<(std::ostream& os, const RedBlackTree<KeyType, ValueType>& redBlackTree)
 	{
@@ -565,4 +566,23 @@ void RedBlackTree<KeyType, ValueType>::fixStructure(Node* node)
 		}
 	}
 	node->color = Node::Color::Black;
+}
+
+template<class KeyType, class ValueType>
+typename RedBlackTree<KeyType, ValueType>::Node * RedBlackTree<KeyType, ValueType>::getMinNode()
+{
+	return min(m_root);
+}
+
+template<class KeyType, class ValueType>
+typename RedBlackTree<KeyType, ValueType>::Node * RedBlackTree<KeyType, ValueType>::getMaxNode()
+{
+	Node* currentNode = m_root;
+
+	while (currentNode->right != nullptr)
+	{
+		currentNode = currentNode->right;
+	}
+
+	return currentNode;
 }
