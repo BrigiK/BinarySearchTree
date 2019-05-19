@@ -144,11 +144,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BinarySearchTree.h" />
+    <ClInclude Include="CCircle.h" />
+    <ClInclude Include="CRectangle.h" />
+    <ClInclude Include="CShapeMap.h" />
+    <ClInclude Include="CSquare.h" />
+    <ClInclude Include="CShape.h" />
     <ClInclude Include="map.h" />
     <ClInclude Include="RedBlackTree.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BinarySearchTree.cpp" />
+    <ClCompile Include="CCircle.cpp" />
+    <ClCompile Include="CRectangle.cpp" />
+    <ClCompile Include="CSquare.cpp" />
+    <ClCompile Include="CShape.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="RedBlackTree.cpp" />
   </ItemGroup>
