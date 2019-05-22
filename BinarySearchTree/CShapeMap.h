@@ -55,7 +55,9 @@ void CShapeMap::insert(CShape* shape)
 	}
 	else
 	{
-		throw std::invalid_argument(std::string("Cannot add duplicate entry: ") + shape->Name());
+		auto name = shape->Name();
+		delete shape;
+		throw std::invalid_argument(std::string("Cannot add duplicate entry: ") + name);
 	}
 }
 

@@ -1,3 +1,7 @@
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <iostream>
 #include <set>
 #include "CSquare.h"
@@ -32,10 +36,20 @@ void InheritanceCompletion()
 	{
 		std::cout << e.what() << std::endl; //expected [Cannot add duplicate entry “My favorite square”]
 	}
+
+	for (auto shape : map)
+	{
+		delete shape;
+	}
 }
 
 int main()
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
 	InheritanceCompletion();
+
+	_CrtDumpMemoryLeaks();
 	return 0;
+
 }
